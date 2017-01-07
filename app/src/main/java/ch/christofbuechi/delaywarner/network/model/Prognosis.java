@@ -17,10 +17,10 @@ public class Prognosis {
     private Object departure;
     @SerializedName("capacity1st")
     @Expose
-    private String capacity1st;
+    private Integer capacity1st;
     @SerializedName("capacity2nd")
     @Expose
-    private String capacity2nd;
+    private Integer capacity2nd;
 
     public Object getPlatform() {
         return platform;
@@ -46,19 +46,19 @@ public class Prognosis {
         this.departure = departure;
     }
 
-    public String getCapacity1st() {
+    public Integer getCapacity1st() {
         return capacity1st;
     }
 
-    public void setCapacity1st(String capacity1st) {
+    public void setCapacity1st(Integer capacity1st) {
         this.capacity1st = capacity1st;
     }
 
-    public String getCapacity2nd() {
+    public Integer getCapacity2nd() {
         return capacity2nd;
     }
 
-    public void setCapacity2nd(String capacity2nd) {
+    public void setCapacity2nd(Integer capacity2nd) {
         this.capacity2nd = capacity2nd;
     }
 

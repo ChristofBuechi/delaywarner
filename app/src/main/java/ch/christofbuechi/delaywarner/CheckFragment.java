@@ -2,10 +2,11 @@ package ch.christofbuechi.delaywarner;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.github.rahatarmanahmed.cpv.CircularProgressView;
 
 import javax.inject.Inject;
 
@@ -20,6 +21,7 @@ public class CheckFragment extends BaseFragment<CheckPresenter> implements Check
 
     @Inject
     CheckPresenter presenter;
+    private boolean animationIsRunning = true;
 
     public static CheckFragment newInstance() {
         Bundle args = new Bundle();
@@ -39,8 +41,18 @@ public class CheckFragment extends BaseFragment<CheckPresenter> implements Check
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        view.findViewById(R.id.testbutton).setOnClickListener(v -> Timber.wtf("LocateButtonPressed"));
-        view.findViewById(R.id.locateButton).setOnClickListener(v -> presenter.callService());
+        view.findViewById(R.id.testbutton).setOnClickListener(v -> {
+            Timber.wtf("LocateButtonPressed");
+            presenter.callService();
+                    CircularProgressView progressView = (CircularProgressView) view.findViewById(R.id.progress_indicator);
+                    if (animationIsRunning) {
+                        progressView.stopAnimation();
+                        animationIsRunning = false;
+                    } else {
+                        progressView.startAnimation();
+                        animationIsRunning = true;
+                    }
+        });
 
     }
 

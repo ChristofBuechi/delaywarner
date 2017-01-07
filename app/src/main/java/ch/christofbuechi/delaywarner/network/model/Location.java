@@ -4,7 +4,7 @@ package ch.christofbuechi.delaywarner.network.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Station {
+public class Location {
 
     @SerializedName("id")
     @Expose
@@ -14,7 +14,7 @@ public class Station {
     private String name;
     @SerializedName("score")
     @Expose
-    private Integer score;
+    private Object score;
     @SerializedName("coordinate")
     @Expose
     private Coordinate coordinate;
@@ -38,11 +38,11 @@ public class Station {
         this.name = name;
     }
 
-    public Integer getScore() {
+    public Object getScore() {
         return score;
     }
 
-    public void setScore(Integer score) {
+    public void setScore(Object score) {
         this.score = score;
     }
 

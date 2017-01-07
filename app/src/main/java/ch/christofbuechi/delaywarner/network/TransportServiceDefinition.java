@@ -19,4 +19,10 @@ public interface TransportServiceDefinition {
 
     @GET("connections")
     Observable<Response<StationWrapper>> listConnections(@Query("from") String fromLocation, @Query("to") String toLocation);
+
+    @GET("stationboard")
+    Observable<Response<StationWrapper>> getStationBoard(@Query("station") String station, @Query("limit") String limit);
+
+    @GET("stationboard")
+    Observable<Response<StationWrapper>> getStationBoardFromId(@Query("id") String id, @Query("limit") String limit);
 }
