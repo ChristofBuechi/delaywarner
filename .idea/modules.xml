@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/DelayWarner.iml" filepath="$PROJECT_DIR$/DelayWarner.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/delaywarner.iml" filepath="$PROJECT_DIR$/delaywarner.iml" />
     </modules>
   </component>
 </project>

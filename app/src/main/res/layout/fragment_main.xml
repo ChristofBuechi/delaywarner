@@ -14,7 +14,7 @@
 
     <android.support.percent.PercentRelativeLayout
 
-        android:id="@+id/testbutton"
+        android:id="@+id/checkbutton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_aspectRatio="100%"
@@ -42,7 +42,7 @@
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:layout_margin="10dp"
-            android:text="bitte klicke hier"
+            android:text="Request Berechtigung"
             android:textColor="@color/white" />
 
 
