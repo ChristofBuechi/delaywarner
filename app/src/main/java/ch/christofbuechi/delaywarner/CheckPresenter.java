@@ -56,6 +56,7 @@ public class CheckPresenter extends BasePresenter<CheckUI> implements GoogleApiC
                 // TODO: 07.01.2017 handle response
                 List<Station> stations = stationWrapperResponse.getStations();
                 Timber.d("List of Statins: " + stations.size());
+                getUi().showStationList(stations);
             }
         }, new Consumer<Throwable>() {
             @Override

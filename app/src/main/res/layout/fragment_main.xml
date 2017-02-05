@@ -31,7 +31,7 @@
             android:id="@+id/progress_indicator"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:cpv_animAutostart="true"
+            app:cpv_animAutostart="false"
             app:cpv_color="@color/white"
             app:cpv_indeterminate="true"
             app:cpv_thickness="5dp" />

@@ -20,10 +20,13 @@ import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import ch.christofbuechi.delaywarner.base.BaseFragment;
 import ch.christofbuechi.delaywarner.base.dagger.AppComponent;
+import ch.christofbuechi.delaywarner.network.model.Station;
 import timber.log.Timber;
 
 /**
@@ -41,6 +44,7 @@ public class CheckFragment extends BaseFragment<CheckPresenter> implements Check
     private View startSearchButton;
     private Context context;
     private GoogleApiClient mGoogleApiClient;
+    private AlertDialog dialog;
 
     public static CheckFragment newInstance() {
         Bundle args = new Bundle();
@@ -68,6 +72,7 @@ public class CheckFragment extends BaseFragment<CheckPresenter> implements Check
         progressView = (CircularProgressView) view.findViewById(R.id.progress_indicator);
         startSearchButton = view.findViewById(R.id.checkbutton);
         startSearchButton.setOnClickListener(v -> {
+            spinProgress();
             Timber.d("LocateButtonPressed");
             if (isPermissionGranted()) {
                 requestLocation();
@@ -166,6 +171,34 @@ public class CheckFragment extends BaseFragment<CheckPresenter> implements Check
         String locationText = "Received Location: " + mCurrentLocation.getLatitude() + ": " + mCurrentLocation.getLongitude();
         Toast.makeText(getContext(), locationText, Toast.LENGTH_LONG).show();
         Timber.i(locationText);
+    }
+
+    @Override
+    public void showStationList(List<Station> stations) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Station station : stations) {
+            stringBuilder.append(station.getName() + ":" + station.getDistance() + "m \n");
+        }
+        if (dialog != null && dialog.isShowing()) {
+            dialog.dismiss();
+        }
+
+        dialog = new AlertDialog.Builder(context).setTitle("Stations")
+                .setMessage(stringBuilder.toString())
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dismissDialog();
+                    }
+                }).create();
+
+        dialog.show();
+        stopProgress();
+    }
+
+    private void dismissDialog() {
+        if (dialog != null && dialog.isShowing()) {
+            dialog.dismiss();
+        }
     }
 
     @Override
