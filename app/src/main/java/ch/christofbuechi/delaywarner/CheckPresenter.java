@@ -17,8 +17,12 @@ import javax.inject.Inject;
 
 import ch.christofbuechi.delaywarner.base.BasePresenter;
 import ch.christofbuechi.delaywarner.network.TransportService;
+import ch.christofbuechi.delaywarner.network.model.PassList;
 import ch.christofbuechi.delaywarner.network.model.Station;
-import ch.christofbuechi.delaywarner.network.model.StationWrapper;
+import ch.christofbuechi.delaywarner.network.model.StationBoard;
+import ch.christofbuechi.delaywarner.network.model.StationBoardWrapper;
+import ch.christofbuechi.delaywarner.util.GpsUtil;
+import io.reactivex.Observable;
 import io.reactivex.functions.Consumer;
 import timber.log.Timber;
 
@@ -40,6 +44,7 @@ public class CheckPresenter extends BasePresenter<CheckUI> implements GoogleApiC
     @Inject
     TransportService transportService;
     private String mLastUpdateTime;
+    private Location lastLocation;
 
 
     @Inject
@@ -54,12 +59,45 @@ public class CheckPresenter extends BasePresenter<CheckUI> implements GoogleApiC
             // TODO: 07.01.2017 handle response
             List<Station> stations = stationWrapperResponse.getStations();
             Timber.d("List of Statins: " + stations.size());
-            getUi().showStationList(stations);
+//            getUi().showStationList(stations);
+            if (stations.size() > 0) {
+                Observable<StationBoardWrapper> stationTable = transportService.getTimeTable(stations.get(0));
+                stationTable.subscribe(stationBoardWrapper -> {
+                    int delayInseconds = getDelay(stationBoardWrapper.getStationboard().get(0));
+                    getUi().showDelayForStation(stationBoardWrapper.getStation(), delayInseconds);
+                }, throwable -> {
+                    Timber.e("Error occured");
+                    Timber.e(throwable);
+                });
+            }
         }, throwable -> {
             Timber.d(throwable);
             // TODO: 07.01.2017 error happened
         });
         // TODO call server...
+    }
+
+    private int getDelay(StationBoard stationboard) {
+        List<PassList> list = stationboard.getPassList();
+
+        int rememberStations = 10;
+        if (list.size() < 10) {
+            rememberStations = list.size();
+        }
+
+
+        for (int i = 0; i < rememberStations; i++) {
+            PassList passlist = list.get(i);
+            if (passlist.getDelay() == null) {
+                return 0;
+            } else {
+                if (list.get(i).getDelay() instanceof Integer) {
+                    return (Integer) list.get(i).getDelay();
+                }
+            }
+
+        }
+        return 0;
     }
 
 
@@ -96,10 +134,22 @@ public class CheckPresenter extends BasePresenter<CheckUI> implements GoogleApiC
 
     @Override
     public void onLocationChanged(Location location) {
+        if (lastLocation == null) {
+            updateLocation(location);
+        } else {
+            if (GpsUtil.distance(location, lastLocation) > 0.1) {
+                updateLocation(location);
+            }
+        }
+
+
+    }
+
+    private void updateLocation(Location location) {
         mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
+        lastLocation = location;
         getUi().updateUI(location, mLastUpdateTime);
         callService(location);
-
     }
 
 }

@@ -2,6 +2,8 @@ package ch.christofbuechi.delaywarner.network;
 
 
 import ch.christofbuechi.delaywarner.base.BaseService;
+import ch.christofbuechi.delaywarner.network.model.Station;
+import ch.christofbuechi.delaywarner.network.model.StationBoardWrapper;
 import ch.christofbuechi.delaywarner.network.model.StationWrapper;
 import io.reactivex.Observable;
 import retrofit2.Retrofit;
@@ -27,6 +29,12 @@ public class TransportService extends BaseService {
 
     public Observable<StationWrapper> getStations(String latitude, String longitude) {
        return transportServiceDefinition.listLocations(latitude, longitude)
+               .flatMap((response) -> applyHTTPErrorHandling(response))
+               .compose((observable) -> applySchedulers(observable));
+    }
+
+    public Observable<StationBoardWrapper> getTimeTable(Station station) {
+        return transportServiceDefinition.getStationBoardFromId(station.getId(), "1")
                .flatMap((response) -> applyHTTPErrorHandling(response))
                .compose((observable) -> applySchedulers(observable));
     }

@@ -21,4 +21,6 @@ public interface CheckUI extends BaseUI {
     void updateUI(Location mCurrentLocation, String mLastUpdateTime);
 
     void showStationList(List<Station> stations);
+
+    void showDelayForStation(Station station, int delayInseconds);
 }

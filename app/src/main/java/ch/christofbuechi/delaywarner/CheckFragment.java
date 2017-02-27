@@ -2,7 +2,6 @@ package ch.christofbuechi.delaywarner;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -176,17 +175,33 @@ public class CheckFragment extends BaseFragment<CheckPresenter> implements Check
         for (Station station : stations) {
             stringBuilder.append(station.getName() + ":" + station.getDistance() + "m \n");
         }
+
+        showTextInDialog("Stations", stringBuilder.toString());
+        stopProgress();
+    }
+
+    @Override
+    public void showDelayForStation(Station station, int delayInseconds) {
+        String text;
+        if (delayInseconds == 0) {
+            text = "Keine Verspätung bekannt";
+        } else {
+            text = String.format("Die Verspätung beträgt %1$s Minuten", delayInseconds);
+        }
+        showTextInDialog("Verspätung für: " + station.getName(), text);
+    }
+
+    private void showTextInDialog(String title, String text) {
         if (dialog != null && dialog.isShowing()) {
             dialog.dismiss();
         }
 
-        dialog = new AlertDialog.Builder(context).setTitle("Stations")
-                .setMessage(stringBuilder.toString())
+        dialog = new AlertDialog.Builder(context).setTitle(title)
+                .setMessage(text)
                 .setPositiveButton(android.R.string.ok, (dialog1, id) -> dismissDialog())
                 .create();
 
         dialog.show();
-        stopProgress();
     }
 
     private void dismissDialog() {

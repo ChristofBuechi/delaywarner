@@ -1,5 +1,6 @@
 package ch.christofbuechi.delaywarner.network;
 
+import ch.christofbuechi.delaywarner.network.model.StationBoardWrapper;
 import ch.christofbuechi.delaywarner.network.model.StationWrapper;
 import io.reactivex.Observable;
 import retrofit2.Response;
@@ -24,5 +25,5 @@ public interface TransportServiceDefinition {
     Observable<Response<StationWrapper>> getStationBoard(@Query("station") String station, @Query("limit") String limit);
 
     @GET("stationboard")
-    Observable<Response<StationWrapper>> getStationBoardFromId(@Query("id") String id, @Query("limit") String limit);
+    Observable<Response<StationBoardWrapper>> getStationBoardFromId(@Query("id") String id, @Query("limit") String limit);
 }
