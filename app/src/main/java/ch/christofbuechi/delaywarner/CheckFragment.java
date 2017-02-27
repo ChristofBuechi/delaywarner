@@ -89,13 +89,14 @@ public class CheckFragment extends BaseFragment<CheckPresenter> implements Check
                 context, Manifest.permission.ACCESS_COARSE_LOCATION);
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
-                    Manifest.permission.READ_PHONE_STATE)) {
+                    Manifest.permission.ACCESS_COARSE_LOCATION)) {
                 showExplanation("Permission Needed", "Rationale", Manifest.permission.ACCESS_COARSE_LOCATION, REQUEST_PERMISSION_LOCATION);
             } else {
                 isPermissionGranted(Manifest.permission.ACCESS_COARSE_LOCATION, REQUEST_PERMISSION_LOCATION);
             }
         } else {
             Toast.makeText(context, "Permission (already) Granted!", Toast.LENGTH_SHORT).show();
+
         }
     }
 
@@ -111,11 +112,7 @@ public class CheckFragment extends BaseFragment<CheckPresenter> implements Check
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(title)
                 .setMessage(message)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        isPermissionGranted(permission, permissionRequestCode);
-                    }
-                });
+                .setPositiveButton(android.R.string.ok, (dialog1, id) -> isPermissionGranted(permission, permissionRequestCode));
         builder.create().show();
     }
 
@@ -185,11 +182,8 @@ public class CheckFragment extends BaseFragment<CheckPresenter> implements Check
 
         dialog = new AlertDialog.Builder(context).setTitle("Stations")
                 .setMessage(stringBuilder.toString())
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dismissDialog();
-                    }
-                }).create();
+                .setPositiveButton(android.R.string.ok, (dialog1, id) -> dismissDialog())
+                .create();
 
         dialog.show();
         stopProgress();

@@ -50,20 +50,14 @@ public class CheckPresenter extends BasePresenter<CheckUI> implements GoogleApiC
     public void callService(Location location) {
 
 //        transportService.getStations("47.3768866", "8.541694000000007").subscribe(new Consumer<StationWrapper>() {
-        transportService.getStations(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude())).subscribe(new Consumer<StationWrapper>() {
-            @Override
-            public void accept(StationWrapper stationWrapperResponse) throws Exception {
-                // TODO: 07.01.2017 handle response
-                List<Station> stations = stationWrapperResponse.getStations();
-                Timber.d("List of Statins: " + stations.size());
-                getUi().showStationList(stations);
-            }
-        }, new Consumer<Throwable>() {
-            @Override
-            public void accept(Throwable throwable) throws Exception {
-                Timber.d(throwable);
-                // TODO: 07.01.2017 error happened
-            }
+        transportService.getStations(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude())).subscribe(stationWrapperResponse -> {
+            // TODO: 07.01.2017 handle response
+            List<Station> stations = stationWrapperResponse.getStations();
+            Timber.d("List of Statins: " + stations.size());
+            getUi().showStationList(stations);
+        }, throwable -> {
+            Timber.d(throwable);
+            // TODO: 07.01.2017 error happened
         });
         // TODO call server...
     }
